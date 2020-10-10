@@ -44,7 +44,7 @@
             let textVersion = []
             for (const prop in object) {
                 prop !== 'assigner' ?
-                    textVersion.push(`${prop}: ${object[prop]}<br />`) :
+                    textVersion.push(`${prop}: ${object[prop]},<br />`) :
                     null
             }
             console.log(textVersion)
