@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <div class="container" style='margin: auto'>
+        <button onclick="objectBuilder()" class='btn btn-primary' id="objectBuilderButton">Click me to make an
+            object!</button>
+        <div class="content">
+            Your Object { <br />
+        </div>
+        <span>}</span>
+    </div>
+
+    <script>
+        const objectBuilder = () => {
+            //this is an empty object to work with. I called it ob for object.
+            let ob = {}
+            //this function allows ob to assign its own property:values
+            ob.assigner = (prop, val) => {
+                ob[prop] = val
+            }
+            //A better approach would be to build this as a form, which i plan to do when i implement this component other places, but I only had 20 minutes to create this during the activity. 
+            alert('Hello! Lets build an object')
+            //this function prompts for property name and value, and then confirms if you want to add another set, at which point it calls itself again after assigning the pair to ob. 
+            //Again, this would be better as a form but i was short for time.
+            const constuct = () => {
+                let property = prompt('What would you like the property name to be?')
+                let value = prompt('And what value should it have?')
+                let another = confirm('Would you like to add another property?')
+                another ? constuct() : null
+                ob.assigner(property, value)
+            }
+            constuct()
+            //this calls the display function from below on our now fully kitted ob object.
+            objectDisplay(ob)
+        };
+        //this function displays the object you call it on. I wanted it to look like actual object syntax on the page so it is not pretty but it is nice looking. One could easily make this look really nice but I am not fast at bootstrap.
+        const objectDisplay = (object) => {
+            //create a variable for the content div, where we want to print our object.
+            let showCase = document.querySelector('.content')
+            //this line is just here so that if you start over without a page refresh you only print your most recent object.
+            showCase.innerHTML = 'Your Object {<br />'
+            //Empty array to add created texts to. There is probably a better way to do this but it worked so I left it alone.
+            let textVersion = []
+            //This for-in loop looks through the object you called the function on. 
+            for (const prop in object) {
+                //I dont want to display the assigner function we created earlier, so we use this ternary op to exclude just that prop. 
+                prop !== 'assigner' ?
+                    //this pushes a prebuilt string that has '[property name] : [property value],' including the comma, to print just like a javascript object is, finally followed by a line break because I was in a hurry for formatting.
+                    //I want to add quotes around strings and the option for the value to be another object or an array but I didn't have time like that. 
+                    textVersion.push(`${prop}: ${object[prop]},<br />`) :
+                    //this is the else portion of the ternary, where we tell it to do nothing if prop === 'assigner'.
+                    null
+            }
+            //You can un-comment this line to see the array you created. 
+            console.log(textVersion)
+            //finally we reverse the textVersion array and join it to delete the extra commas, then add it to the innerHtml of our showCase variable from earlier in this function. 
+            //You will notice a span in the html, thats to have the closing bracket on our object since I wasn't sure how to input text into the middle of stuff already there easily. 
+            showCase.innerHTML += textVersion.reverse().join('')
+        };
+    </script>
+</body>
+
+</html>
